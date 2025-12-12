@@ -48,19 +48,49 @@ function loadProducts() {
         
         // Guardar en localStorage para futuras sincronizaciones
         localStorage.setItem('products', JSON.stringify(initialProducts));
+        
+        // Renderizar productos iniciales
+        productGrid.innerHTML = initialProducts.map(product => `
+            <div class="product-card ${ product.outOfStock ? 'product-out-of-stock' : ''}" data-category="${product.category}" data-style="${product.style || ''}" data-color="${product.color || ''}">
+                <div class="card-imagen">
+                    <img src="${product.image}" alt="${product.name}">
+                    ${product.outOfStock ? '<div class="out-of-stock-overlay"><span>AGOTADO</span></div>' : ''}
+                </div>
+                <div class="card-details">
+                    <h3 class="product-name">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                </div>
+                <div class="card-footer">
+                    <span class="product-price" data-price="${product.price}">$${product.price.toLocaleString('es-AR')}</span>
+                    <button class="add-cart-btn" ${product.outOfStock ? 'disabled' : ''}>${product.outOfStock ? 'No Disponible' : 'añadir al carrito'}</button>
+                </div>
+            </div>
+        `).join('');
+        
         attachCartListeners();
         return;
     }
     
     // Buscar productos del localStorage que coincidan con los del HTML y actualizar su estado
     const updatedDefaultProducts = defaultProductsFromHTML.map((dp, index) => {
-        // Buscar si existe en localStorage
+        // Buscar si existe en localStorage por nombre
         const storedProduct = storedProducts.find(sp => 
             sp.name.trim().toLowerCase() === dp.name
         );
         
-        // Si existe en localStorage, usar su estado (outOfStock, etc.)
-        if (storedProduct) {
+        // Si existe en localStorage, mantener su info pero actualizar imagen del HTML si es producto default
+        if (storedProduct && storedProduct.isDefault) {
+            return {
+                ...storedProduct,
+                // Actualizar la imagen desde el HTML para productos por defecto
+                image: dp.image,
+                // Asegurar que mantiene categoría, estilo y color del HTML
+                category: dp.category,
+                style: dp.style || storedProduct.style,
+                color: dp.color || storedProduct.color
+            };
+        } else if (storedProduct) {
+            // Producto editado desde admin, mantener todo de localStorage
             return storedProduct;
         }
         
@@ -91,6 +121,9 @@ function loadProducts() {
     
     // Ordenar por fecha de creación (más nuevos primero)
     const sortedProducts = allProducts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    
+    // Guardar la lista actualizada en localStorage
+    localStorage.setItem('products', JSON.stringify(sortedProducts));
     
     const allProductsToRender = sortedProducts;
     
@@ -125,20 +158,26 @@ const cartCount = document.getElementById('cartCount');
 const cartTotal = document.getElementById('cartTotal');
 
 // Funcionalidad del modal del carrito
-cartBtn.addEventListener('click', () => {
-    cartModal.classList.add('active');
-});
+if (cartBtn) {
+    cartBtn.addEventListener('click', () => {
+        cartModal.classList.add('active');
+    });
+}
 
-closeCart.addEventListener('click', () => {
-    cartModal.classList.remove('active');
-});
+if (closeCart) {
+    closeCart.addEventListener('click', () => {
+        cartModal.classList.remove('active');
+    });
+}
 
 // Cerrar modal al hacer click fuera
-cartModal.addEventListener('click', (e) => {
-    if (e.target === cartModal) {
-        cartModal.classList.remove('active');
-    }
-});
+if (cartModal) {
+    cartModal.addEventListener('click', (e) => {
+        if (e.target === cartModal) {
+            cartModal.classList.remove('active');
+        }
+    });
+}
 
 // Función para agregar event listeners a los botones del carrito
 function attachCartListeners() {
@@ -210,6 +249,11 @@ function searchProducts(query) {
 
 // Función para actualizar el carrito
 function updateCart() {
+    // Proteger si los elementos no existen
+    if (!cartCount || !cartTotal || !cartItems) {
+        return;
+    }
+    
     // Actualizar contador
     cartCount.textContent = cart.length;
     
@@ -277,15 +321,6 @@ function attachFilterListeners() {
         });
     });
 }
-
-// Inicializar la página
-document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-    attachCartListeners();
-    attachFilterListeners();
-    setupAdvancedFilters();
-    updateCart();
-});
 
 // Sistema de filtros avanzados
 function setupAdvancedFilters() {
@@ -403,6 +438,7 @@ function clearAllFilters() {
 document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
     attachCartListeners();
+    attachFilterListeners();
     setupAdvancedFilters();
     updateCart(); // Cargar carrito guardado
     
@@ -472,3 +508,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Sincronización automática cuando se modifica localStorage desde otra ventana (admin)
+window.addEventListener('storage', (e) => {
+    if (e.key === 'products' || e.key === 'productsUpdated') {
+        // Recargar productos cuando el admin hace cambios
+        console.log('Productos actualizados desde admin, recargando...');
+        loadProducts();
+        applyFilters();
+    }
+});
+
+// También verificar cambios periódicamente (por si el evento storage no se dispara)
+let lastProductsUpdate = localStorage.getItem('productsUpdated') || '0';
+setInterval(() => {
+    const currentUpdate = localStorage.getItem('productsUpdated') || '0';
+    if (currentUpdate !== lastProductsUpdate) {
+        lastProductsUpdate = currentUpdate;
+        console.log('Cambios detectados en productos, recargando...');
+        loadProducts();
+        applyFilters();
+    }
+}, 2000); // Verificar cada 2 segundos

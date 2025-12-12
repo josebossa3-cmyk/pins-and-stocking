@@ -24,12 +24,21 @@ if (logoutBtn) {
 // Obtener productos del localStorage o inicializar array vacío
 let products = JSON.parse(localStorage.getItem('products')) || [];
 
+// Función helper para guardar productos y notificar cambios
+function saveProducts() {
+    localStorage.setItem('products', JSON.stringify(products));
+    // Disparar evento personalizado para notificar cambios
+    localStorage.setItem('productsUpdated', Date.now().toString());
+}
+
 // Referencias a elementos del DOM
 const productForm = document.getElementById('productForm');
 const adminProductsList = document.getElementById('adminProductsList');
 const productImageInput = document.getElementById('productImage');
 const imagePreview = document.getElementById('imagePreview');
 const previewImg = document.getElementById('previewImg');
+const colorInput = document.getElementById('productColor');
+const colorSelectedText = document.getElementById('colorSelectedText');
 
 // Variable para almacenar la imagen en base64
 let currentImageBase64 = '';
@@ -64,10 +73,9 @@ function compressImage(base64, maxWidth = 800, quality = 0.8) {
 
 // Manejar la selección de color
 const colorButtons = document.querySelectorAll('.color-select-btn');
-const colorInput = document.getElementById('productColor');
-const colorSelectedText = document.getElementById('colorSelectedText');
 
-colorButtons.forEach(btn => {
+if (colorButtons.length > 0 && colorInput && colorSelectedText) {
+    colorButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         // Remover selección de todos los botones
         colorButtons.forEach(b => b.classList.remove('selected'));
@@ -83,10 +91,12 @@ colorButtons.forEach(btn => {
         colorSelectedText.textContent = `Color seleccionado: ${selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}`;
         colorSelectedText.classList.add('has-selection');
     });
-});
+    });
+}
 
 // Manejar la vista previa de la imagen con compresión
-productImageInput.addEventListener('change', async (e) => {
+if (productImageInput && imagePreview && previewImg) {
+    productImageInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (file) {
         // Verificar que sea una imagen
@@ -130,15 +140,19 @@ productImageInput.addEventListener('change', async (e) => {
         };
         reader.readAsDataURL(file);
     }
-});
+    });
+}
 
 // Cargar productos existentes al inicio
 document.addEventListener('DOMContentLoaded', () => {
+    // Recargar productos desde localStorage (pueden haber sido actualizados)
+    products = JSON.parse(localStorage.getItem('products')) || [];
     renderAdminProducts();
 });
 
 // Manejar el envío del formulario
-productForm.addEventListener('submit', (e) => {
+if (productForm) {
+    productForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
     if (!currentImageBase64) {
@@ -164,7 +178,7 @@ productForm.addEventListener('submit', (e) => {
     products.push(newProduct);
     
     // Guardar en localStorage
-    localStorage.setItem('products', JSON.stringify(products));
+    saveProducts();
     
     // Limpiar formulario
     productForm.reset();
@@ -183,10 +197,13 @@ productForm.addEventListener('submit', (e) => {
     
     // Feedback visual
     showNotification('Producto agregado exitosamente', 'success');
-});
+    });
+}
 
 // Renderizar productos en el panel de administración
 function renderAdminProducts() {
+    if (!adminProductsList) return;
+    
     if (products.length === 0) {
         adminProductsList.innerHTML = `
             <div class="empty-products">
@@ -213,11 +230,11 @@ function renderAdminProducts() {
                 <span class="admin-product-price">$${product.price.toLocaleString('es-AR')}</span>
             </div>
             <div class="admin-card-actions">
-                <button class="btn-stock ${product.outOfStock ? 'btn-in-stock' : 'btn-out-stock'}" onclick="toggleStock(${product.id})">
+                <button class="btn-stock ${product.outOfStock ? 'btn-in-stock' : 'btn-out-stock'}" onclick="toggleStock('${product.id}')">
                     ${product.outOfStock ? 'Marcar Disponible' : 'Marcar Agotado'}
                 </button>
-                <button class="btn-edit" onclick="editProduct(${product.id})">Editar</button>
-                <button class="btn-delete" onclick="deleteProduct(${product.id})">Eliminar</button>
+                <button class="btn-edit" onclick="editProduct('${product.id}')">Editar</button>
+                <button class="btn-delete" onclick="deleteProduct('${product.id}')">Eliminar</button>
             </div>
         </div>
     `).join('');
@@ -226,8 +243,8 @@ function renderAdminProducts() {
 // Eliminar producto
 function deleteProduct(productId) {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-        products = products.filter(p => p.id !== productId);
-        localStorage.setItem('products', JSON.stringify(products));
+        products = products.filter(p => String(p.id) !== String(productId));
+        saveProducts();
         renderAdminProducts();
         showNotification('Producto eliminado', 'error');
     }
@@ -235,7 +252,7 @@ function deleteProduct(productId) {
 
 // Editar producto
 function editProduct(productId) {
-    const product = products.find(p => p.id === productId);
+    const product = products.find(p => String(p.id) === String(productId));
     if (!product) return;
     
     // Crear modal de edición
@@ -381,7 +398,14 @@ function editProduct(productId) {
     document.getElementById('editForm').addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const index = products.findIndex(p => p.id === productId);
+        const index = products.findIndex(p => String(p.id) === String(productId));
+        if (index === -1) {
+            showNotification('Error: Producto no encontrado', 'error');
+            closeEditModal();
+            return;
+        }
+        
+        const originalProduct = products[index];
         products[index] = {
             id: productId,
             name: document.getElementById('editProductName').value,
@@ -391,10 +415,13 @@ function editProduct(productId) {
             subcategory: document.getElementById('editProductSubcategory').value || '',
             style: document.getElementById('editProductStyle').value || '',
             color: document.getElementById('editProductColor').value || '',
-            image: editImageBase64
+            image: editImageBase64,
+            createdAt: originalProduct.createdAt || Date.now(),
+            outOfStock: originalProduct.outOfStock || false,
+            isDefault: originalProduct.isDefault || false
         };
         
-        localStorage.setItem('products', JSON.stringify(products));
+        saveProducts();
         renderAdminProducts();
         closeEditModal();
         showNotification('Producto actualizado', 'success');
@@ -410,11 +437,11 @@ function editProduct(productId) {
 
 // Alternar estado de stock
 function toggleStock(productId) {
-    const product = products.find(p => p.id === productId);
+    const product = products.find(p => String(p.id) === String(productId));
     if (!product) return;
     
     product.outOfStock = !product.outOfStock;
-    localStorage.setItem('products', JSON.stringify(products));
+    saveProducts();
     renderAdminProducts();
     
     showNotification(
