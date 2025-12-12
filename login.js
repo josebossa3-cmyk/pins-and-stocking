@@ -7,8 +7,8 @@ const ADMIN_CREDENTIALS = {
 const loginForm = document.getElementById('loginForm');
 const errorMessage = document.getElementById('errorMessage');
 
-// Verificar si ya está logueado
-if (localStorage.getItem('isLoggedIn') === 'true') {
+// Verificar si ya está logueado (usando sessionStorage para cerrar sesión al cerrar navegador)
+if (sessionStorage.getItem('isLoggedIn') === 'true') {
     window.location.href = 'admin.html';
 }
 
@@ -20,9 +20,9 @@ loginForm.addEventListener('submit', (e) => {
     
     // Validar credenciales
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-        // Guardar sesión
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('adminUser', username);
+        // Guardar sesión (sessionStorage se borra al cerrar el navegador)
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('adminUser', username);
         
         // Mostrar mensaje de éxito
         showSuccess();

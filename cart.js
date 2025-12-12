@@ -530,3 +530,16 @@ setInterval(() => {
         applyFilters();
     }
 }, 2000); // Verificar cada 2 segundos
+
+// Limpiar datos temporales al cerrar el navegador
+window.addEventListener('beforeunload', () => {
+    // Limpiar timestamp de actualización (dato temporal)
+    localStorage.removeItem('productsUpdated');
+});
+
+// Limpiar sesión de admin si existe (por seguridad)
+window.addEventListener('load', () => {
+    // Si hay sesión de admin en localStorage antigua, limpiarla
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('adminUser');
+});

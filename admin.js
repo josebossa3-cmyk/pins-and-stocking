@@ -1,12 +1,12 @@
-// Verificar autenticación
-if (localStorage.getItem('isLoggedIn') !== 'true') {
+// Verificar autenticación (sessionStorage se borra automáticamente al cerrar el navegador)
+if (sessionStorage.getItem('isLoggedIn') !== 'true') {
     window.location.href = 'login.html';
 }
 
 // Mostrar nombre de usuario
 const adminUsername = document.getElementById('adminUsername');
 if (adminUsername) {
-    adminUsername.textContent = localStorage.getItem('adminUser') || 'Administrador';
+    adminUsername.textContent = sessionStorage.getItem('adminUser') || 'Administrador';
 }
 
 // Manejar cierre de sesión
@@ -14,8 +14,10 @@ const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
         if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('adminUser');
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('adminUser');
+            // Limpiar datos temporales
+            localStorage.removeItem('productsUpdated');
             window.location.href = 'login.html';
         }
     });
@@ -510,3 +512,10 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Limpiar sesión y datos temporales al cerrar el navegador
+window.addEventListener('beforeunload', () => {
+    // La sesión se cierra automáticamente (sessionStorage)
+    // Limpiar datos temporales de sincronización
+    localStorage.removeItem('productsUpdated');
+});
