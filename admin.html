@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración - Pins and Stocking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="imagenes/logo.jpg" alt="Pins and Stocking" />
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Ver Tienda</a></li>
+                <li><a href="#" class="active">Administración</a></li>
+            </ul>
+        </nav>
+        <div class="admin-actions">
+            <div class="admin-badge">
+                👤 <span id="adminUsername">Administrador</span>
+            </div>
+            <button class="btn-logout" id="logoutBtn">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Panel de Administración</h2>
+            <p>Gestiona tus productos</p>
+        </div>
+    </section>
+
+    <!-- Formulario para agregar productos -->
+    <div class="admin-container">
+        <div class="admin-panel">
+            <h2>Agregar Nuevo Producto</h2>
+            <form id="productForm" class="product-form">
+                <div class="form-group">
+                    <label for="productName">Nombre del Producto</label>
+                    <input type="text" id="productName" required placeholder="Ej: Medias deportivas premium">
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">Descripción</label>
+                    <textarea id="productDescription" required placeholder="Descripción del producto"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">Precio</label>
+                        <input type="number" id="productPrice" required placeholder="3500" step="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productCategory">Categoría</label>
+                        <select id="productCategory" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="medias">Medias</option>
+                            <option value="pins">Pins</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productSubcategory">Subcategoría</label>
+                    <input type="text" id="productSubcategory" placeholder="Ej: Deportivas, Casuales, Vintage, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label for="productStyle">Estilo</label>
+                    <select id="productStyle">
+                        <option value="">Seleccionar estilo (opcional)</option>
+                        <option value="lisas">Lisas</option>
+                        <option value="animadas">Animadas</option>
+                        <option value="soquetes">Soquetes</option>
+                        <option value="niños">De Niños</option>
+                        <option value="largas">Largas</option>
+                        <option value="old school">Old School</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productColor">Color</label>
+                    <div class="color-selector">
+                        <div class="color-palette-admin">
+                            <button type="button" class="color-select-btn" data-color="negro" style="background: #000000;" title="Negro"></button>
+                            <button type="button" class="color-select-btn" data-color="blanco" style="background: #FFFFFF; border: 1px solid rgba(139, 0, 0, 0.3);" title="Blanco"></button>
+                            <button type="button" class="color-select-btn" data-color="gris" style="background: #808080;" title="Gris"></button>
+                            <button type="button" class="color-select-btn" data-color="rojo" style="background: #DC143C;" title="Rojo"></button>
+                            <button type="button" class="color-select-btn" data-color="azul" style="background: #1E90FF;" title="Azul"></button>
+                            <button type="button" class="color-select-btn" data-color="verde" style="background: #32CD32;" title="Verde"></button>
+                            <button type="button" class="color-select-btn" data-color="amarillo" style="background: #FFD700;" title="Amarillo"></button>
+                            <button type="button" class="color-select-btn" data-color="naranja" style="background: #FF8C00;" title="Naranja"></button>
+                            <button type="button" class="color-select-btn" data-color="rosa" style="background: #FF69B4;" title="Rosa"></button>
+                            <button type="button" class="color-select-btn" data-color="morado" style="background: #9370DB;" title="Morado"></button>
+                            <button type="button" class="color-select-btn" data-color="marron" style="background: #8B4513;" title="Marrón"></button>
+                            <button type="button" class="color-select-btn" data-color="multicolor" style="background: linear-gradient(135deg, #FF0000 0%, #FF7F00 14%, #FFFF00 28%, #00FF00 42%, #0000FF 56%, #4B0082 70%, #9400D3 84%, #FF0000 100%);" title="Multicolor"></button>
+                        </div>
+                        <input type="hidden" id="productColor">
+                        <p class="color-selected-text" id="colorSelectedText">Ningún color seleccionado</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">Imagen del Producto</label>
+                    <input type="file" id="productImage" accept="image/*" required>
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImg" src="" alt="Vista previa">
+                        <span class="preview-text">Vista previa de la imagen</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Agregar Producto</button>
+            </form>
+        </div>
+
+        <!-- Lista de productos existentes -->
+        <div class="products-list">
+            <h2>Productos Actuales</h2>
+            <div id="adminProductsList" class="admin-products-grid">
+                <!-- Los productos se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Pins and Stocking</h4>
+                <p>Panel de administración - Gestión de productos</p>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+                <a href="index.html">Volver a la tienda</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Pins and Stocking - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,722 @@
+/* Estilos específicos para el panel de administración */
+
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-badge {
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-logout {
+    background: rgba(220, 20, 60, 0.2);
+    border: 1px solid rgba(220, 20, 60, 0.4);
+    color: #DC143C;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: rgba(220, 20, 60, 0.3);
+    border-color: #DC143C;
+    transform: translateY(-2px);
+}
+
+.admin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+}
+
+.admin-panel {
+    background: linear-gradient(145deg, #1a1a1a 0%, #2d0a1f 100%);
+    border: 2px solid rgba(139, 0, 0, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(139, 0, 0, 0.3);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.admin-panel h2 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(139, 0, 0, 0.3);
+}
+
+.product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group label {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(139, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: "Playfair Display", serif;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.form-group select option {
+    background: #000000;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #8B0000;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.image-preview {
+    margin-top: 12px;
+    border: 2px dashed rgba(139, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: 8px;
+    display: none;
+    object-fit: contain;
+}
+
+.image-preview img.show {
+    display: block;
+}
+
+.preview-text {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 14px;
+}
+
+.preview-text.loading {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.image-preview.has-image .preview-text {
+    display: none;
+}
+
+/* Selector de color en admin */
+.color-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.color-palette-admin {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(139, 0, 0, 0.2);
+}
+
+.color-select-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.color-select-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5);
+}
+
+.color-select-btn.selected {
+    border-color: #DC143C;
+    transform: scale(1.15);
+    box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.3);
+}
+
+.color-selected-text {
+    color: #b8b8b8;
+    font-size: 13px;
+    font-style: italic;
+    margin: 0;
+}
+
+.color-selected-text.has-selection {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139, 0, 0, 0.6);
+}
+
+.products-list {
+    background: transparent;
+}
+
+.products-list h2 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(139, 0, 0, 0.3);
+}
+
+.admin-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.admin-product-card {
+    background: linear-gradient(145deg, #1a1a1a 0%, #2d0a1f 100%);
+    border-radius: 16px;
+    overflow: visible;
+    border: 1px solid rgba(139, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(139, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+}
+
+.admin-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(139, 0, 0, 0.5);
+}
+
+.admin-card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #0f0f0f;
+    position: relative;
+    flex-shrink: 0;
+    border-radius: 16px 16px 0 0;
+}
+
+.admin-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-category-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.product-subcategory-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: linear-gradient(135deg, #4B0082 0%, #8B0000 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.out-of-stock-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(220, 20, 60, 0.6);
+}
+
+.admin-product-card.out-of-stock {
+    opacity: 0.7;
+}
+
+.admin-product-card.out-of-stock .admin-card-image img {
+    filter: grayscale(50%);
+}
+
+.admin-card-details {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 200px;
+}
+
+/* Scrollbar personalizado para las cards */
+.admin-card-details::-webkit-scrollbar {
+    width: 6px;
+}
+
+.admin-card-details::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.admin-card-details::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    border-radius: 3px;
+}
+
+.admin-card-details::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+}
+
+.admin-product-name {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.admin-product-description {
+    color: #b8b8b8;
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.admin-product-price {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.admin-card-actions {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px 20px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    border-radius: 0 0 16px 16px;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-stock,
+.btn-out-stock,
+.btn-in-stock {
+    flex: 1 1 calc(50% - 4px);
+    padding: 10px 8px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-stock {
+    flex: 1 1 100%;
+}
+
+.btn-out-stock {
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    color: white;
+}
+
+.btn-out-stock:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.5);
+}
+
+.btn-in-stock {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+}
+
+.btn-in-stock:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.5);
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, #4B0082 0%, #8B0000 100%);
+    color: white;
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(75, 0, 130, 0.5);
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    color: white;
+}
+
+.btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 20, 60, 0.5);
+}
+
+.empty-products {
+    text-align: center;
+    padding: 60px 20px;
+    color: #b8b8b8;
+    grid-column: 1 / -1;
+}
+
+.empty-products p {
+    font-size: 16px;
+}
+
+/* Modal de edición */
+.edit-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.edit-modal.active {
+    display: flex;
+}
+
+.edit-modal-content {
+    background: linear-gradient(145deg, #1a1a1a 0%, #2d0a1f 100%);
+    border: 2px solid rgba(139, 0, 0, 0.4);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    min-width: 320px;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: visible;
+    box-shadow: 0 20px 60px rgba(139, 0, 0, 0.5);
+    margin: auto;
+}
+
+/* Scrollbar personalizado para el modal */
+.edit-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.edit-modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.edit-modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    border-radius: 4px;
+}
+
+.edit-modal-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+}
+
+.edit-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(139, 0, 0, 0.3);
+}
+
+.edit-modal-header h2 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.close-edit-modal {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 32px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.close-edit-modal:hover {
+    color: #8B0000;
+    transform: rotate(90deg);
+}
+
+/* ============================================ */
+/* RESPONSIVE DESIGN - ADMIN PANEL */
+/* ============================================ */
+
+@media (max-width: 1024px) {
+    .admin-container {
+        grid-template-columns: 1fr;
+        padding: 30px 30px;
+    }
+
+    .admin-panel {
+        position: relative;
+        top: 0;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-actions {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    .admin-badge {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+
+    .btn-logout {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+
+    .admin-products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-container {
+        padding: 20px 16px;
+    }
+
+    .admin-panel {
+        padding: 24px 20px;
+    }
+
+    .admin-panel h2,
+    .products-list h2 {
+        font-size: 20px;
+    }
+
+    .color-palette-admin {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .color-select-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .edit-modal {
+        padding: 15px;
+    }
+
+    .edit-modal-content {
+        width: 100%;
+        max-width: 95%;
+        padding: 24px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-card-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-edit,
+    .btn-delete,
+    .btn-stock,
+    .btn-out-stock,
+    .btn-in-stock {
+        width: 100%;
+        flex: 1 1 auto;
+        min-width: auto;
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+
+    .admin-panel h2 {
+        font-size: 18px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+
+    .color-palette-admin {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .btn-submit {
+        font-size: 14px;
+        padding: 12px 20px;
+    }
+
+    .edit-modal {
+        padding: 10px;
+    }
+
+    .edit-modal-content {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 20px 16px;
+        border-radius: 12px;
+    }
+
+    .edit-modal-header h2 {
+        font-size: 18px;
+    }
+
+    .admin-product-card {
+        max-width: 100%;
+    }
+
+    .admin-card-image {
+        height: 220px;
+    }
+}

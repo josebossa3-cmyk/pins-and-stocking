@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pins And Stocking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="imagenes/logo.jpg" alt="Pins and Stocking" />
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" data-filter="todo" class="filter-link active">todo</a></li>
+                <li><a href="#" data-filter="medias" class="filter-link">medias</a></li>
+                <li><a href="#" data-filter="pins" class="filter-link">pins</a></li>
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input">
+            <button class="search-clear" id="searchClear" style="display: none;">&times;</button>
+        </div>
+        <div class="header-actions">
+            <button class="cart-btn" id="cartBtn">
+                🛒 Carrito (<span id="cartCount">0</span>)
+            </button>
+            <a href="login.html" class="admin-link" title="Panel de Administración">⚙️</a>
+        </div>
+    </header>
+
+    <!-- Modal del Carrito -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Carrito de Compras</h2>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Los items se agregarán aquí dinámicamente -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total:</strong>
+                    <span id="cartTotal">$0</span>
+                </div>
+                <button class="checkout-btn" id="checkoutWhatsApp">
+                    <span>📱</span> Enviar pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Tendencias que Marcan tu Estilo.</h2>
+            <p>pensado para vos </p>
+        </div>
+    </section>
+
+    <!-- Sección de Filtros -->
+    <div class="filters-container">
+        <aside class="filters-sidebar">
+            <h3 class="filters-title">Filtros</h3>
+
+            <!-- Filtro por tipo de producto -->
+            <div class="filter-section">
+                <button class="filter-header">
+                    <span>TIPO DE PRODUCTO</span>
+                    <span class="filter-arrow">▼</span>
+                </button>
+                <div class="filter-content active">
+                    <label class="filter-option">
+                        <input type="radio" name="productType" value="todo" checked>
+                        <span>Todos</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="productType" value="medias">
+                        <span>Medias</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="productType" value="pins">
+                        <span>Pins</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Filtro por estilo -->
+            <div class="filter-section">
+                <button class="filter-header">
+                    <span>ESTILO</span>
+                    <span class="filter-arrow">▼</span>
+                </button>
+                <div class="filter-content active">
+                    <label class="filter-option">
+                        <input type="checkbox" class="style-filter" value="lisas">
+                        <span>Lisas</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" class="style-filter" value="animadas">
+                        <span>Animadas</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" class="style-filter" value="soquetes">
+                        <span>Soquetes</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" class="style-filter" value="niños">
+                        <span>De Niños</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" class="style-filter" value="largas">
+                        <span>Largas</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" class="style-filter" value="old school">
+                        <span>Old School</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Filtro por color -->
+            <div class="filter-section">
+                <button class="filter-header">
+                    <span>COLOR</span>
+                    <span class="filter-arrow">▼</span>
+                </button>
+                <div class="filter-content active">
+                    <div class="color-palette">
+                        <button class="color-option" data-color="negro" style="background: #000000;" title="Negro"></button>
+                        <button class="color-option" data-color="blanco" style="background: #FFFFFF; border: 1px solid rgba(139, 0, 0, 0.3);" title="Blanco"></button>
+                        <button class="color-option" data-color="gris" style="background: #808080;" title="Gris"></button>
+                        <button class="color-option" data-color="rojo" style="background: #DC143C;" title="Rojo"></button>
+                        <button class="color-option" data-color="azul" style="background: #1E90FF;" title="Azul"></button>
+                        <button class="color-option" data-color="verde" style="background: #32CD32;" title="Verde"></button>
+                        <button class="color-option" data-color="amarillo" style="background: #FFD700;" title="Amarillo"></button>
+                        <button class="color-option" data-color="naranja" style="background: #FF8C00;" title="Naranja"></button>
+                        <button class="color-option" data-color="rosa" style="background: #FF69B4;" title="Rosa"></button>
+                        <button class="color-option" data-color="morado" style="background: #9370DB;" title="Morado"></button>
+                        <button class="color-option" data-color="marron" style="background: #8B4513;" title="Marrón"></button>
+                        <button class="color-option" data-color="multicolor" style="background: linear-gradient(135deg, #FF0000 0%, #FF7F00 14%, #FFFF00 28%, #00FF00 42%, #0000FF 56%, #4B0082 70%, #9400D3 84%, #FF0000 100%);" title="Multicolor"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón para limpiar filtros -->
+            <button class="clear-filters-btn" id="clearFilters">Limpiar Filtros</button>
+        </aside>
+    
+    <!--aca empieza la seccion de las cards-->
+    <div class="product-grid">
+        <div class="product-card" data-category="medias">
+            <div class="card-imagen">
+                <img src="/imagenes/descarga.jpeg" alt="medias de colores">
+            </div>
+
+            <div class="card-details">
+                <h3 class="product-name">medias de colores </h3>
+                <p class="product-description"> descripcion de las medias </p>
+            </div>
+            <div class="card-footer">
+                <span class="product-price" data-price="3500">3.500</span>
+                <button class="add-cart-btn">añadir al carrito </button>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="medias">
+            <div class="card-imagen">
+                <img src="/imagenes/medias.jpeg" alt=" medias de colores 2">
+            </div>
+            <div class="card-details">
+                <h3 class="product-name">medias de colores 2 </h3>
+                <p class="product-description">descripcion de las medias </p>
+            </div>
+            <div class="card-footer">
+                <span class="product-price" data-price="4500">4.500</span>
+                <button class="add-cart-btn">añadir al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="medias">
+            <div class="card-imagen">
+                <img src="imagenes/Imagen de WhatsApp 2025-11-08 a las 16.54.22_7ea3d6f4.jpg" alt="nike floreadas">
+            </div>
+            <div class="card-details">
+                <h3 class="product-name">medias nike floreadas</h3>
+                <p class="product-description">medias old skul con flores</p>
+            </div>
+            <div class="card-footer">
+                <span class="product-price" data-price="3500">3.500</span>
+                <button class="add-cart-btn">añadir al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="medias"> 
+        <div class="card-imagen">
+            <img src="imagenes/Imagen de WhatsApp 2025-11-08 a las 16.54.22_962868c1.jpg" alt="medias old school">
+        </div>
+        <div class="card-details">
+            <h3 class="product-name">medias old school</h3>
+            <p class="product-description">medias old school</p>
+        </div>
+        <div class="card-footer">
+            <span class="product-price" data-price="3500">3.500</span>    
+            <button class="add-cart-btn">añadir al carrito</button>
+        </div>
+        </div>
+
+        <div class="product-card" data-category="medias">
+            <div class="card-imagen">
+                <img src="/imagenes/descarga.jpeg" alt="medias deportivas">
+            </div>
+            <div class="card-details">
+                <h3 class="product-name">medias deportivas premium</h3>
+                <p class="product-description">medias de alta calidad para deportes</p>
+            </div>
+            <div class="card-footer">
+                <span class="product-price" data-price="4000">4.000</span>
+                <button class="add-cart-btn">añadir al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="medias">
+            <div class="card-imagen">
+                <img src="/imagenes/medias.jpeg" alt="medias casuales">
+            </div>
+            <div class="card-details">
+                <h3 class="product-name">medias casuales estampadas</h3>
+                <p class="product-description">perfectas para el día a día</p>
+            </div>
+            <div class="card-footer">
+                <span class="product-price" data-price="3200">3.200</span>
+                <button class="add-cart-btn">añadir al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="medias">
+            <div class="card-imagen">
+                <img src="imagenes/Imagen de WhatsApp 2025-11-08 a las 16.54.22_7ea3d6f4.jpg" alt="medias vintage">
+            </div>
+            <div class="card-details">
+                <h3 class="product-name">medias vintage retro</h3>
+                <p class="product-description">estilo clásico con diseños únicos</p>
+            </div>
+            <div class="card-footer">
+                <span class="product-price" data-price="3800">3.800</span>
+                <button class="add-cart-btn">añadir al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="medias">
+            <div class="card-imagen">
+                <img src="/imagenes/descarga.jpeg" alt="medias urbanas">
+            </div>
+            <div class="card-details">
+                <h3 class="product-name">medias urbanas street</h3>
+                <p class="product-description">diseño urbano contemporáneo</p>
+            </div>
+            <div class="card-footer">
+                <span class="product-price" data-price="4200">4.200</span>
+                <button class="add-cart-btn">añadir al carrito</button>
+            </div>
+        </div>
+        <!-- aca termina la seccion de las card -->
+    </div>
+    </div> <!-- Cierre de filters-container -->
+
+<footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Pins and Stocking</h4>
+                <p>Tendencias que marcan tu estilo desde 2024</p>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+                <a href="#servicios">Servicios</a>
+                <a href="#productos">Productos</a>
+                <a href="#about">Nosotros</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <a href="mailto:info@stylesocks.com">pins@gmail.com</a>
+                <a href="tel:+5491112345678">2657239836</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Pins and Stocking Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="cart.js"></script>
+</body>
+
+</html>
