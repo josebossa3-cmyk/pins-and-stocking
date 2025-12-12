@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpiar Storage - Pins and Stocking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #8B0000 50%, #4B0082 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(26, 26, 26, 0.95);
+            border: 2px solid rgba(139, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #DC143C;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .btn {
+            background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(220, 20, 60, 0.6);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+        .btn-success:hover {
+            box-shadow: 0 8px 24px rgba(72, 187, 120, 0.6);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .status.success {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+        .status.error {
+            background: rgba(220, 20, 60, 0.2);
+            color: #DC143C;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Limpieza de Datos</h1>
+        
+        <div class="info">
+            <h3>Estado Actual del LocalStorage:</h3>
+            <p id="productCount">Productos guardados: <strong>0</strong></p>
+            <p id="cartCount">Items en carrito: <strong>0</strong></p>
+            <p id="loginStatus">Sesión: <strong>No iniciada</strong></p>
+        </div>
+
+        <div id="statusMessage"></div>
+
+        <div>
+            <button class="btn" onclick="limpiarTodo()">🗑️ Limpiar TODO</button>
+            <button class="btn" onclick="limpiarSoloProductos()">📦 Limpiar Solo Productos</button>
+            <button class="btn" onclick="limpiarCarrito()">🛒 Vaciar Carrito</button>
+            <button class="btn" onclick="cerrarSesion()">🔓 Cerrar Sesión Admin</button>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="index.html" class="btn btn-success">✓ Volver a la Tienda</a>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar estado actual
+        function actualizarEstado() {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+            document.getElementById('productCount').innerHTML = 
+                `Productos guardados: <strong>${products.length}</strong>`;
+            document.getElementById('cartCount').innerHTML = 
+                `Items en carrito: <strong>${cart.length}</strong>`;
+            document.getElementById('loginStatus').innerHTML = 
+                `Sesión: <strong>${isLoggedIn === 'true' ? 'Iniciada (Admin)' : 'No iniciada'}</strong>`;
+        }
+
+        function mostrarMensaje(texto, tipo = 'success') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.innerHTML = `<div class="status ${tipo}">${texto}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        function limpiarTodo() {
+            if (confirm('¿Estás seguro de que quieres limpiar TODOS los datos? Esto incluye productos, carrito y sesión.')) {
+                localStorage.clear();
+                actualizarEstado();
+                mostrarMensaje('✅ Todos los datos han sido eliminados');
+            }
+        }
+
+        function limpiarSoloProductos() {
+            if (confirm('¿Eliminar todos los productos guardados? Los productos del HTML volverán a aparecer.')) {
+                localStorage.removeItem('products');
+                actualizarEstado();
+                mostrarMensaje('✅ Productos eliminados del almacenamiento');
+            }
+        }
+
+        function limpiarCarrito() {
+            localStorage.removeItem('cart');
+            actualizarEstado();
+            mostrarMensaje('✅ Carrito vaciado');
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('adminUser');
+            actualizarEstado();
+            mostrarMensaje('✅ Sesión cerrada');
+        }
+
+        // Actualizar al cargar
+        actualizarEstado();
+    </script>
+</body>
+</html>
