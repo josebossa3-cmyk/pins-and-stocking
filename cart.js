@@ -237,10 +237,12 @@ function searchProducts(query) {
         const match = name.includes(normalizedQuery) || description.includes(normalizedQuery);
         
         if (match || normalizedQuery === '') {
-            product.style.display = 'flex';
+            product.classList.remove('hidden');
+            // Remover cualquier estilo en línea que pueda interferir
+            product.style.display = '';
             visibleCount++;
         } else {
-            product.style.display = 'none';
+            product.classList.add('hidden');
         }
     });
     
@@ -401,6 +403,8 @@ function applyFilters() {
         // Mostrar u ocultar card
         if (show) {
             card.classList.remove('hidden');
+            // Limpiar estilos en línea para evitar conflictos
+            card.style.display = '';
         } else {
             card.classList.add('hidden');
         }

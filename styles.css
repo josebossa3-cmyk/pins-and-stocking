@@ -794,9 +794,15 @@ header .logo {
     margin: 0;
 }
 
-/* Ocultar productos que no coinciden con el filtro */
+/* Ocultar productos que no coinciden con el filtro - mantener estructura */
 .product-card.hidden {
-    display: none;
+    display: none !important;
+}
+
+/* Asegurar que los productos visibles mantengan su estructura */
+.product-card:not(.hidden) {
+    display: flex;
+    flex-direction: column;
 }
 
 /* ============================================ */
