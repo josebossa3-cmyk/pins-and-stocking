@@ -1,7 +1,7 @@
 // Credenciales de administrador (en producción, esto debería estar en un servidor)
 const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'admin123'
+    username: 'Admin',
+    password: 'murci123'
 };
 
 const loginForm = document.getElementById('loginForm');

@@ -62,7 +62,7 @@ function loadProducts() {
                 </div>
                 <div class="card-footer">
                     <span class="product-price" data-price="${product.price}">$${product.price.toLocaleString('es-AR')}</span>
-                    <button class="add-cart-btn" ${product.outOfStock ? 'disabled' : ''}>${product.outOfStock ? 'No Disponible' : 'añadir al carrito'}</button>
+                    <button class="add-cart-btn" ${product.outOfStock ? 'disabled' : ''}>${product.outOfStock ? 'No Disponible' : 'Añadir al Carrito'}</button>
                 </div>
             </div>
         `).join('');
@@ -140,7 +140,7 @@ function loadProducts() {
             </div>
             <div class="card-footer">
                 <span class="product-price" data-price="${product.price}">$${product.price.toLocaleString('es-AR')}</span>
-                <button class="add-cart-btn" ${product.outOfStock ? 'disabled' : ''}>${product.outOfStock ? 'No Disponible' : 'añadir al carrito'}</button>
+                <button class="add-cart-btn" ${product.outOfStock ? 'disabled' : ''}>${product.outOfStock ? 'No Disponible' : 'Añadir al Carrito'}</button>
             </div>
         </div>
     `).join('');
@@ -217,7 +217,7 @@ function attachCartListeners() {
             newBtn.disabled = true;
             
             setTimeout(() => {
-                newBtn.textContent = 'añadir al carrito';
+                newBtn.textContent = 'Añadir al Carrito';
                 newBtn.style.background = 'linear-gradient(135deg, #8B0000 0%, #4B0082 100%)';
                 newBtn.disabled = false;
             }, 1500);
