@@ -34,19 +34,24 @@ body {
     background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
     color: rgb(255, 255, 255);
     border: none;
-    padding: 16px 24px;
-    border-radius: 12px;
-    font-size: 15px;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 14px;
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 .cart-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(139, 0, 0, 0.6);
+    background: linear-gradient(135deg, #A00000 0%, #5B0090 100%);
 }
 
 .header-actions {
@@ -737,8 +742,7 @@ header .logo {
 
 .cart-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 16px;
     padding: 16px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(139, 0, 0, 0.2);
@@ -749,6 +753,98 @@ header .logo {
 
 .cart-item:hover {
     background: rgba(255, 255, 255, 0.08);
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.cart-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cart-item-details h4 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.cart-item-price {
+    color: #b8b8b8;
+    font-size: 14px;
+    margin: 0;
+}
+
+.cart-item-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.qty-btn {
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-btn:hover {
+    background: linear-gradient(135deg, #A00000 0%, #5B0090 100%);
+    transform: scale(1.1);
+}
+
+.quantity {
+    color: #ffffff;
+    font-weight: 600;
+    min-width: 30px;
+    text-align: center;
+}
+
+.remove-btn {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.remove-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 20, 60, 0.5);
 }
 
 .cart-item-info {
