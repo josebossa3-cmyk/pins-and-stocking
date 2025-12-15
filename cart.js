@@ -147,6 +147,7 @@ function loadProducts() {
     
     // Re-asignar event listeners a los nuevos botones
     attachCartListeners();
+    attachImagePreviewListeners();
 }
 
 // Referencias a elementos del DOM
@@ -450,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
     attachFilterListeners();
     setupAdvancedFilters();
     updateCart(); // Cargar carrito guardado
+    attachImagePreviewListeners(); // Agregar listeners de vista previa
     
     // Configurar búsqueda
     const searchInput = document.getElementById('searchInput');
@@ -552,3 +554,63 @@ window.addEventListener('load', () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('adminUser');
 });
+
+// Funcionalidad de vista previa de imágenes
+const imagePreviewModal = document.getElementById('imagePreviewModal');
+const previewModalImage = document.getElementById('previewModalImage');
+const closePreview = document.getElementById('closePreview');
+
+// Función para abrir vista previa
+function openImagePreview(imageSrc, productName) {
+    if (imagePreviewModal && previewModalImage) {
+        previewModalImage.src = imageSrc;
+        previewModalImage.alt = productName;
+        imagePreviewModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevenir scroll
+    }
+}
+
+// Función para cerrar vista previa
+function closeImagePreview() {
+    if (imagePreviewModal) {
+        imagePreviewModal.classList.remove('active');
+        document.body.style.overflow = ''; // Restaurar scroll
+    }
+}
+
+// Event listener para cerrar con el botón X
+if (closePreview) {
+    closePreview.addEventListener('click', closeImagePreview);
+}
+
+// Event listener para cerrar al hacer click fuera de la imagen
+if (imagePreviewModal) {
+    imagePreviewModal.addEventListener('click', (e) => {
+        if (e.target === imagePreviewModal) {
+            closeImagePreview();
+        }
+    });
+}
+
+// Event listener para cerrar con la tecla Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && imagePreviewModal.classList.contains('active')) {
+        closeImagePreview();
+    }
+});
+
+// Agregar event listeners a las imágenes de productos (se ejecuta después de cargar productos)
+function attachImagePreviewListeners() {
+    const productImages = document.querySelectorAll('.card-imagen');
+    
+    productImages.forEach(imageContainer => {
+        imageContainer.addEventListener('click', (e) => {
+            const img = imageContainer.querySelector('img');
+            if (img) {
+                const productCard = imageContainer.closest('.product-card');
+                const productName = productCard?.querySelector('.product-name')?.textContent || 'Producto';
+                openImagePreview(img.src, productName);
+            }
+        });
+    });
+}
