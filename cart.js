@@ -342,17 +342,25 @@ function setupAdvancedFilters() {
         radio.addEventListener('change', applyFilters);
     });
 
-    // Filtros de estilo (checkboxes)
+    // Filtros de estilo (radio buttons)
     const styleFilters = document.querySelectorAll('.style-filter');
-    styleFilters.forEach(checkbox => {
-        checkbox.addEventListener('change', applyFilters);
+    styleFilters.forEach(radio => {
+        radio.addEventListener('change', applyFilters);
     });
 
-    // Filtros de color
+    // Filtros de color (solo uno a la vez)
     const colorOptions = document.querySelectorAll('.color-option');
     colorOptions.forEach(option => {
         option.addEventListener('click', function() {
-            this.classList.toggle('active');
+            // Si ya está activo, desactivarlo
+            if (this.classList.contains('active')) {
+                this.classList.remove('active');
+            } else {
+                // Desactivar todos los demás colores
+                colorOptions.forEach(opt => opt.classList.remove('active'));
+                // Activar este color
+                this.classList.add('active');
+            }
             applyFilters();
         });
     });
@@ -371,11 +379,9 @@ function applyFilters() {
     // Obtener filtros seleccionados
     const selectedType = document.querySelector('input[name="productType"]:checked')?.value || 'todo';
     
-    const selectedStyles = Array.from(document.querySelectorAll('.style-filter:checked'))
-        .map(cb => cb.value);
+    const selectedStyle = document.querySelector('input[name="styleType"]:checked')?.value || '';
     
-    const selectedColors = Array.from(document.querySelectorAll('.color-option.active'))
-        .map(btn => btn.getAttribute('data-color'));
+    const selectedColor = document.querySelector('.color-option.active')?.getAttribute('data-color') || '';
     
     // Aplicar filtros a cada card
     productCards.forEach(card => {
@@ -391,12 +397,12 @@ function applyFilters() {
         }
         
         // Filtro por estilo
-        if (selectedStyles.length > 0 && !selectedStyles.includes(cardStyle)) {
+        if (selectedStyle && cardStyle !== selectedStyle) {
             show = false;
         }
         
         // Filtro por color
-        if (selectedColors.length > 0 && !selectedColors.includes(cardColor)) {
+        if (selectedColor && cardColor !== selectedColor) {
             show = false;
         }
         
@@ -417,10 +423,9 @@ function clearAllFilters() {
     const todoRadio = document.querySelector('input[name="productType"][value="todo"]');
     if (todoRadio) todoRadio.checked = true;
     
-    // Desmarcar estilos
-    document.querySelectorAll('.style-filter:checked').forEach(cb => {
-        cb.checked = false;
-    });
+    // Resetear estilos al valor vacío (Todos)
+    const allStylesRadio = document.querySelector('input[name="styleType"][value=""]');
+    if (allStylesRadio) allStylesRadio.checked = true;
     
     // Desmarcar colores
     document.querySelectorAll('.color-option.active').forEach(btn => {
