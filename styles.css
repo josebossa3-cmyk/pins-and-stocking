@@ -286,9 +286,30 @@ header .logo {
     border-radius: 20px;
     padding: 24px;
     height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
     position: sticky;
     top: 100px;
     box-shadow: 0 10px 40px rgba(139, 0, 0, 0.3);
+}
+
+/* Scrollbar personalizado para los filtros */
+.filters-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.filters-sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.filters-sidebar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    border-radius: 4px;
+}
+
+.filters-sidebar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
 }
 
 .filters-title {

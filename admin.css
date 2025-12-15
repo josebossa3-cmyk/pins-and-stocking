@@ -52,8 +52,29 @@
     padding: 30px;
     box-shadow: 0 10px 40px rgba(139, 0, 0, 0.3);
     height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
     position: sticky;
     top: 100px;
+}
+
+/* Scrollbar personalizado para el panel de admin */
+.admin-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-panel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.admin-panel::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+    border-radius: 4px;
+}
+
+.admin-panel::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
 }
 
 .admin-panel h2 {
@@ -187,8 +208,8 @@
 
 .color-palette-admin {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
     padding: 12px;
     background: rgba(255, 255, 255, 0.02);
     border-radius: 12px;
@@ -196,8 +217,8 @@
 }
 
 .color-select-btn {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
@@ -205,15 +226,28 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.color-select-btn:hover {
+.color-select-btn:hover,
+.edit-color-select-btn:hover {
     transform: scale(1.15);
     box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5);
 }
 
-.color-select-btn.selected {
+.color-select-btn.selected,
+.edit-color-select-btn.selected {
     border-color: #DC143C;
     transform: scale(1.15);
     box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.3);
+}
+
+/* Estilos para botones de color en modal de edición */
+.edit-color-select-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .color-selected-text {
