@@ -6,10 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Pins and Stocking - Tienda de medias y pins con estilo único">
     <title>Pins and Stocking - Tendencias que Marcan tu Estilo</title>
+    
+    <!-- Meta tags para forzar apertura en navegador externo -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Script para detectar navegador interno y mostrar mensaje -->
+    <script>
+        (function() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isInstagram = /Instagram/i.test(userAgent);
+            const isFacebook = /FBAN|FBAV/i.test(userAgent);
+            const isInApp = isInstagram || isFacebook;
+            
+            if (isInApp) {
+                // Mostrar banner para abrir en navegador externo
+                window.addEventListener('DOMContentLoaded', function() {
+                    const banner = document.createElement('div');
+                    banner.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        background: linear-gradient(135deg, #8B0000 0%, #4B0082 100%);
+                        color: white;
+                        padding: 15px;
+                        text-align: center;
+                        z-index: 10000;
+                        font-size: 14px;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    `;
+                    banner.innerHTML = `
+                        <strong>📱 Para mejor experiencia</strong><br>
+                        Abre esta página en tu navegador (Chrome/Safari)<br>
+                        <small style="opacity: 0.9;">Toca los 3 puntos ⋮ arriba y selecciona "Abrir en navegador"</small>
+                    `;
+                    document.body.appendChild(banner);
+                    
+                    // Ajustar el body para que no quede detrás del banner
+                    document.body.style.paddingTop = '80px';
+                });
+            }
+        })();
+    </script>
 </head>
 
 <body>
