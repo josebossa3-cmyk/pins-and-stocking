@@ -349,23 +349,6 @@ function setupAdvancedFilters() {
         radio.addEventListener('change', applyFilters);
     });
 
-    // Filtros de color (solo uno a la vez)
-    const colorOptions = document.querySelectorAll('.color-option');
-    colorOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            // Si ya está activo, desactivarlo
-            if (this.classList.contains('active')) {
-                this.classList.remove('active');
-            } else {
-                // Desactivar todos los demás colores
-                colorOptions.forEach(opt => opt.classList.remove('active'));
-                // Activar este color
-                this.classList.add('active');
-            }
-            applyFilters();
-        });
-    });
-
     // Botón limpiar filtros
     const clearBtn = document.getElementById('clearFilters');
     if (clearBtn) {
@@ -382,13 +365,10 @@ function applyFilters() {
     
     const selectedStyle = document.querySelector('input[name="styleType"]:checked')?.value || '';
     
-    const selectedColor = document.querySelector('.color-option.active')?.getAttribute('data-color') || '';
-    
     // Aplicar filtros a cada card
     productCards.forEach(card => {
         const cardCategory = card.getAttribute('data-category');
         const cardStyle = card.getAttribute('data-style');
-        const cardColor = card.getAttribute('data-color');
         
         let show = true;
         
@@ -399,11 +379,6 @@ function applyFilters() {
         
         // Filtro por estilo
         if (selectedStyle && cardStyle !== selectedStyle) {
-            show = false;
-        }
-        
-        // Filtro por color
-        if (selectedColor && cardColor !== selectedColor) {
             show = false;
         }
         
@@ -427,11 +402,6 @@ function clearAllFilters() {
     // Resetear estilos al valor vacío (Todos)
     const allStylesRadio = document.querySelector('input[name="styleType"][value=""]');
     if (allStylesRadio) allStylesRadio.checked = true;
-    
-    // Desmarcar colores
-    document.querySelectorAll('.color-option.active').forEach(btn => {
-        btn.classList.remove('active');
-    });
     
     // Limpiar búsqueda si existe
     const searchInput = document.getElementById('searchInput');

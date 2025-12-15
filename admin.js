@@ -73,29 +73,6 @@ function compressImage(base64, maxWidth = 800, quality = 0.8) {
     });
 }
 
-// Manejar la selección de color
-const colorButtons = document.querySelectorAll('.color-select-btn');
-
-if (colorButtons.length > 0 && colorInput && colorSelectedText) {
-    colorButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Remover selección de todos los botones
-        colorButtons.forEach(b => b.classList.remove('selected'));
-        
-        // Seleccionar el botón clickeado
-        btn.classList.add('selected');
-        
-        // Guardar el valor del color
-        const selectedColor = btn.getAttribute('data-color');
-        colorInput.value = selectedColor;
-        
-        // Actualizar texto
-        colorSelectedText.textContent = `Color seleccionado: ${selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}`;
-        colorSelectedText.classList.add('has-selection');
-    });
-    });
-}
-
 // Manejar la vista previa de la imagen con compresión
 if (productImageInput && imagePreview && previewImg) {
     productImageInput.addEventListener('change', async (e) => {
@@ -170,7 +147,6 @@ if (productForm) {
         category: document.getElementById('productCategory').value,
         subcategory: document.getElementById('productSubcategory').value || '',
         style: document.getElementById('productStyle').value || '',
-        color: document.getElementById('productColor').value || '',
         image: currentImageBase64,
         createdAt: Date.now(),
         outOfStock: false
@@ -187,12 +163,6 @@ if (productForm) {
     currentImageBase64 = '';
     previewImg.classList.remove('show');
     imagePreview.classList.remove('has-image');
-    
-    // Limpiar selección de color
-    colorButtons.forEach(b => b.classList.remove('selected'));
-    colorInput.value = '';
-    colorSelectedText.textContent = 'Ningún color seleccionado';
-    colorSelectedText.classList.remove('has-selection');
     
     // Actualizar vista
     renderAdminProducts();
@@ -311,28 +281,6 @@ function editProduct(productId) {
                 </div>
 
                 <div class="form-group">
-                    <label for="editProductColor">Color</label>
-                    <div class="color-selector">
-                        <div class="color-palette-admin">
-                            <button type="button" class="edit-color-select-btn" data-color="negro" style="background: #000000;" title="Negro"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="blanco" style="background: #FFFFFF; border: 1px solid rgba(139, 0, 0, 0.3);" title="Blanco"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="gris" style="background: #808080;" title="Gris"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="rojo" style="background: #DC143C;" title="Rojo"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="azul" style="background: #1E90FF;" title="Azul"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="verde" style="background: #32CD32;" title="Verde"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="amarillo" style="background: #FFD700;" title="Amarillo"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="naranja" style="background: #FF8C00;" title="Naranja"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="rosa" style="background: #FF69B4;" title="Rosa"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="morado" style="background: #9370DB;" title="Morado"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="marron" style="background: #8B4513;" title="Marrón"></button>
-                            <button type="button" class="edit-color-select-btn" data-color="multicolor" style="background: linear-gradient(135deg, #FF0000 0%, #FF7F00 14%, #FFFF00 28%, #00FF00 42%, #0000FF 56%, #4B0082 70%, #9400D3 84%, #FF0000 100%);" title="Multicolor"></button>
-                        </div>
-                        <input type="hidden" id="editProductColor" value="${product.color || ''}">
-                        <p class="color-selected-text" id="editColorSelectedText">Ningún color seleccionado</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label for="editProductImage">Imagen del Producto</label>
                     <input type="file" id="editProductImage" accept="image/*">
                     <div class="image-preview has-image" id="editImagePreview">
@@ -350,32 +298,6 @@ function editProduct(productId) {
     
     // Variable para la nueva imagen en edición
     let editImageBase64 = product.image;
-    
-    // Manejar selección de color en el modal de edición
-    const editColorButtons = document.querySelectorAll('.edit-color-select-btn');
-    const editColorInput = document.getElementById('editProductColor');
-    const editColorSelectedText = document.getElementById('editColorSelectedText');
-    
-    // Preseleccionar color si existe
-    if (product.color) {
-        const selectedBtn = document.querySelector(`.edit-color-select-btn[data-color="${product.color}"]`);
-        if (selectedBtn) {
-            selectedBtn.classList.add('selected');
-            editColorSelectedText.textContent = `Color seleccionado: ${product.color.charAt(0).toUpperCase() + product.color.slice(1)}`;
-            editColorSelectedText.classList.add('has-selection');
-        }
-    }
-    
-    editColorButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            editColorButtons.forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            const selectedColor = btn.getAttribute('data-color');
-            editColorInput.value = selectedColor;
-            editColorSelectedText.textContent = `Color seleccionado: ${selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}`;
-            editColorSelectedText.classList.add('has-selection');
-        });
-    });
     
     // Manejar cambio de imagen en el modal de edición
     const editImageInput = document.getElementById('editProductImage');
@@ -416,7 +338,6 @@ function editProduct(productId) {
             category: document.getElementById('editProductCategory').value,
             subcategory: document.getElementById('editProductSubcategory').value || '',
             style: document.getElementById('editProductStyle').value || '',
-            color: document.getElementById('editProductColor').value || '',
             image: editImageBase64,
             createdAt: originalProduct.createdAt || Date.now(),
             outOfStock: originalProduct.outOfStock || false,
