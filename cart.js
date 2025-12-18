@@ -81,11 +81,40 @@ productsCollection.onSnapshot((snapshot) => {
 function setupAdvancedFilters() {
     const typeFilters = document.querySelectorAll('input[name="productType"]');
     const styleFilters = document.querySelectorAll('input[name="styleType"]');
-    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+    const clearFiltersBtn = document.getElementById('clearFilters');
     const searchInput = document.getElementById('searchInput');
+    const navFilterLinks = document.querySelectorAll('.filter-link');
+    
+    // Filtros de navegación (Todo, Medias, Pins)
+    navFilterLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Remover clase active de todos los links
+            navFilterLinks.forEach(l => l.classList.remove('active'));
+            
+            // Agregar clase active al link clickeado
+            link.classList.add('active');
+            
+            const filterValue = link.getAttribute('data-filter');
+            
+            // Actualizar radio buttons en sidebar
+            document.querySelectorAll('input[name="productType"]').forEach(input => {
+                input.checked = input.value === filterValue;
+            });
+            
+            applyFilters();
+        });
+    });
     
     typeFilters.forEach(filter => {
-        filter.addEventListener('change', applyFilters);
+        filter.addEventListener('change', () => {
+            // Sincronizar con navegación
+            navFilterLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-filter') === filter.value);
+            });
+            applyFilters();
+        });
     });
     
     styleFilters.forEach(filter => {
@@ -129,18 +158,26 @@ function applyFilters() {
 }
 
 function clearAllFilters() {
+    // Resetear filtros de tipo de producto
     document.querySelectorAll('input[name="productType"]').forEach(input => {
         input.checked = input.value === 'todo';
     });
     
+    // Resetear filtros de estilo
     document.querySelectorAll('input[name="styleType"]').forEach(input => {
         input.checked = input.value === '';
     });
     
+    // Resetear búsqueda
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.value = '';
     }
+    
+    // Sincronizar links de navegación
+    document.querySelectorAll('.filter-link').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('data-filter') === 'todo');
+    });
     
     applyFilters();
 }
@@ -326,6 +363,17 @@ function checkout() {
     
     window.open(whatsappUrl, '_blank');
 }
+
+// ==========================================
+// LIMPIEZA AL CERRAR PESTAÑA
+// ==========================================
+window.addEventListener('beforeunload', () => {
+    // Limpiar carrito
+    localStorage.removeItem('cart');
+    
+    // Limpiar cualquier otro dato que se quiera resetear
+    // Si tienes filtros guardados en localStorage, también los puedes limpiar aquí
+});
 
 // ==========================================
 // INICIALIZACIÓN
