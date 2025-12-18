@@ -1,4 +1,12 @@
 // ==========================================
+// VERSIÓN Y CONTROL DE CACHÉ
+// ==========================================
+const APP_VERSION = '20251218004';
+console.log('🔄 Cargando cart.js - Versión:', APP_VERSION);
+console.log('📱 Navegador:', navigator.userAgent);
+console.log('⏰ Timestamp:', new Date().toISOString());
+
+// ==========================================
 // INICIALIZAR FIRESTORE COLLECTION
 // ==========================================
 const productsCollection = db.collection('products');
@@ -19,19 +27,47 @@ let allProducts = [];
 // Cargar productos desde Firestore
 async function loadProducts() {
     try {
-        const snapshot = await productsCollection.orderBy('createdAt', 'desc').get();
+        console.log('Iniciando carga de productos...');
+        
+        // Forzar recarga desde servidor (sin caché)
+        const snapshot = await productsCollection.orderBy('createdAt', 'desc').get({ source: 'server' });
+        
         allProducts = snapshot.docs.map(doc => ({
             ...doc.data(),
             id: doc.id
         }));
         
-        console.log('Productos cargados:', allProducts.length);
+        console.log('Productos cargados desde servidor:', allProducts.length);
+        
+        if (allProducts.length === 0) {
+            console.warn('No se encontraron productos en la base de datos');
+            const productGrid = document.querySelector('.product-grid');
+            if (productGrid) {
+                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">No hay productos disponibles en este momento.</p>';
+            }
+            return;
+        }
+        
         renderProducts(allProducts);
         attachCartListeners();
         attachImagePreviewListeners();
     } catch (error) {
         console.error('Error al cargar productos:', error);
         console.error('Detalles del error:', error.code, error.message);
+        
+        // Mostrar mensaje de error en la página
+        const productGrid = document.querySelector('.product-grid');
+        if (productGrid) {
+            productGrid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #e53e3e;">
+                    <p style="font-size: 18px; margin-bottom: 10px;">⚠️ Error al cargar productos</p>
+                    <p style="font-size: 14px; color: #666;">${error.message}</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #8B0000; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        Reintentar
+                    </button>
+                </div>
+            `;
+        }
     }
 }
 
@@ -39,12 +75,22 @@ async function loadProducts() {
 function renderProducts(products) {
     const productGrid = document.querySelector('.product-grid');
     
+    if (!productGrid) {
+        console.error('No se encontró el contenedor product-grid');
+        return;
+    }
+    
+    if (!products || products.length === 0) {
+        productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">No hay productos que coincidan con los filtros seleccionados.</p>';
+        return;
+    }
+    
     productGrid.innerHTML = products.map(product => `
         <div class="product-card ${product.outOfStock ? 'product-out-of-stock' : ''}" 
              data-category="${product.category}" 
              data-style="${product.style || ''}">
             <div class="card-imagen">
-                <img src="${product.image}" alt="${product.name}" loading="lazy">
+                <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='imagenes/placeholder.jpg';this.onerror=null;">
                 ${product.outOfStock ? '<div class="out-of-stock-overlay"><span>AGOTADO</span></div>' : ''}
             </div>
             <div class="card-details">
@@ -59,6 +105,8 @@ function renderProducts(products) {
             </div>
         </div>
     `).join('');
+    
+    console.log('Renderizados', products.length, 'productos');
 }
 
 // Escuchar cambios en tiempo real de Firestore
@@ -79,16 +127,29 @@ productsCollection.onSnapshot((snapshot) => {
 // SISTEMA DE FILTROS
 // ==========================================
 function setupAdvancedFilters() {
+    console.log('Configurando filtros avanzados...');
+    
     const typeFilters = document.querySelectorAll('input[name="productType"]');
     const styleFilters = document.querySelectorAll('input[name="styleType"]');
     const clearFiltersBtn = document.getElementById('clearFilters');
     const searchInput = document.getElementById('searchInput');
     const navFilterLinks = document.querySelectorAll('.filter-link');
     
+    console.log('Elementos encontrados:', {
+        typeFilters: typeFilters.length,
+        styleFilters: styleFilters.length,
+        navFilterLinks: navFilterLinks.length,
+        clearFiltersBtn: !!clearFiltersBtn,
+        searchInput: !!searchInput
+    });
+    
     // Filtros de navegación (Todo, Medias, Pins)
     navFilterLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
+        // Usar touchstart para mejor respuesta en móviles
+        const handleClick = (e) => {
             e.preventDefault();
+            
+            console.log('Click en filtro de navegación:', link.getAttribute('data-filter'));
             
             // Remover clase active de todos los links
             navFilterLinks.forEach(l => l.classList.remove('active'));
@@ -104,11 +165,15 @@ function setupAdvancedFilters() {
             });
             
             applyFilters();
-        });
+        };
+        
+        link.addEventListener('click', handleClick);
+        link.addEventListener('touchend', handleClick);
     });
     
     typeFilters.forEach(filter => {
         filter.addEventListener('change', () => {
+            console.log('Cambio en filtro de tipo:', filter.value);
             // Sincronizar con navegación
             navFilterLinks.forEach(link => {
                 link.classList.toggle('active', link.getAttribute('data-filter') === filter.value);
@@ -118,7 +183,10 @@ function setupAdvancedFilters() {
     });
     
     styleFilters.forEach(filter => {
-        filter.addEventListener('change', applyFilters);
+        filter.addEventListener('change', () => {
+            console.log('Cambio en filtro de estilo:', filter.value);
+            applyFilters();
+        });
     });
     
     if (clearFiltersBtn) {
@@ -127,7 +195,18 @@ function setupAdvancedFilters() {
     
     if (searchInput) {
         searchInput.addEventListener('input', applyFilters);
+        
+        // Agregar botón de limpiar búsqueda
+        const searchClear = document.getElementById('searchClear');
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                applyFilters();
+            });
+        }
     }
+    
+    console.log('Filtros configurados correctamente');
 }
 
 function applyFilters() {
@@ -135,14 +214,23 @@ function applyFilters() {
     const selectedStyle = document.querySelector('input[name="styleType"]:checked')?.value || '';
     const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
     
+    console.log('Aplicando filtros:', { selectedType, selectedStyle, searchTerm, totalProducts: allProducts.length });
+    
+    if (!allProducts || allProducts.length === 0) {
+        console.warn('No hay productos para filtrar');
+        return;
+    }
+    
     let filteredProducts = [...allProducts];
     
     if (selectedType !== 'todo') {
         filteredProducts = filteredProducts.filter(p => p.category === selectedType);
+        console.log('Filtrado por tipo:', filteredProducts.length);
     }
     
     if (selectedStyle !== '' && selectedStyle !== 'todo') {
         filteredProducts = filteredProducts.filter(p => p.style === selectedStyle);
+        console.log('Filtrado por estilo:', filteredProducts.length);
     }
     
     if (searchTerm) {
@@ -150,8 +238,10 @@ function applyFilters() {
             p.name.toLowerCase().includes(searchTerm) ||
             p.description.toLowerCase().includes(searchTerm)
         );
+        console.log('Filtrado por búsqueda:', filteredProducts.length);
     }
     
+    console.log('Productos finales a mostrar:', filteredProducts.length);
     renderProducts(filteredProducts);
     attachCartListeners();
     attachImagePreviewListeners();
@@ -378,11 +468,30 @@ window.addEventListener('beforeunload', () => {
 // ==========================================
 // INICIALIZACIÓN
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
+
+// Limpiar caché al cargar la página
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        // Página cargada desde caché (botón atrás)
+        console.log('Página cargada desde caché, recargando...');
+        window.location.reload();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOM cargado, iniciando aplicación...');
+    console.log('User Agent:', navigator.userAgent);
+    
+    // Primero configurar los filtros
     setupAdvancedFilters();
+    
+    // Actualizar contador del carrito
     updateCartCount();
     
+    // Cargar productos (esto es asíncrono)
+    await loadProducts();
+    
+    // Configurar eventos del carrito
     const cartBtn = document.getElementById('cartBtn');
     if (cartBtn) {
         cartBtn.addEventListener('click', openCart);
@@ -398,6 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
         checkoutBtn.addEventListener('click', checkout);
     }
     
+    // Configurar preview de imágenes
     const closePreviewBtn = document.getElementById('closePreview');
     if (closePreviewBtn) {
         closePreviewBtn.addEventListener('click', closeImagePreview);
@@ -417,4 +527,6 @@ document.addEventListener('DOMContentLoaded', () => {
             closeImagePreview();
         }
     });
+    
+    console.log('Aplicación iniciada correctamente');
 });

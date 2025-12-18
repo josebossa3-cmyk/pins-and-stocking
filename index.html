@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Pins and Stocking - Tienda de medias y pins con estilo único">
+    
+    <!-- Meta tags para evitar caché -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Pins and Stocking - Tendencias que Marcan tu Estilo</title>
     
     <!-- Meta tags para forzar apertura en navegador externo -->
@@ -14,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20251218004">
     
     <!-- Script para detectar navegador interno y mostrar mensaje -->
     <script>
@@ -75,7 +81,9 @@
         </div>
         <div class="header-actions">
             <button class="cart-btn" id="cartBtn">
-                🛒 Carrito (<span id="cartCount">0</span>)
+                <span class="cart-icon">🛒</span>
+                <span class="cart-text">Carrito</span>
+                <span id="cartCount" class="cart-count">0</span>
             </button>
             <a href="login.html" class="admin-link" title="Panel de Administración">⚙️</a>
         </div>
@@ -198,15 +206,84 @@
         </div>
     </footer>
 
+    <!-- Script para limpiar caché automáticamente -->
+    <script>
+        // VERSIÓN DE LA APLICACIÓN - Incrementa este número con cada cambio
+        const CURRENT_VERSION = '20251218004';
+        console.log('🚀 Iniciando Pins and Stocking - v' + CURRENT_VERSION);
+        
+        // Verificar si la página fue cargada desde caché
+        if (performance.navigation.type === 2) {
+            console.log('⚠️ Página cargada desde caché del navegador, recargando desde servidor...');
+            location.reload(true);
+        }
+        
+        // Verificar si hay una versión anterior guardada
+        const savedVersion = localStorage.getItem('appVersion');
+        const hasReloaded = sessionStorage.getItem('hasReloadedForVersion');
+        
+        if (savedVersion !== CURRENT_VERSION && !hasReloaded) {
+            console.log('🔄 Nueva versión detectada (' + savedVersion + ' → ' + CURRENT_VERSION + '), limpiando caché...');
+            
+            // Marcar que se está recargando para evitar bucle infinito
+            sessionStorage.setItem('hasReloadedForVersion', CURRENT_VERSION);
+            
+            // Limpiar todo
+            Promise.all([
+                // Limpiar service workers
+                'serviceWorker' in navigator ? 
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                        return Promise.all(registrations.map(r => r.unregister()));
+                    }) : Promise.resolve(),
+                
+                // Limpiar caché del navegador
+                'caches' in window ?
+                    caches.keys().then(function(names) {
+                        return Promise.all(names.map(name => caches.delete(name)));
+                    }) : Promise.resolve()
+            ]).then(function() {
+                console.log('✅ Caché limpiada, guardando nueva versión y recargando...');
+                localStorage.setItem('appVersion', CURRENT_VERSION);
+                
+                // Forzar recarga desde el servidor (sin caché)
+                setTimeout(function() {
+                    window.location.href = window.location.href.split('?')[0] + '?v=' + CURRENT_VERSION + '&t=' + Date.now();
+                }, 100);
+            });
+        } else if (savedVersion === CURRENT_VERSION) {
+            console.log('✅ Versión actual:', CURRENT_VERSION);
+            sessionStorage.removeItem('hasReloadedForVersion');
+        } else {
+            console.log('✅ Recarga completada, versión:', CURRENT_VERSION);
+            localStorage.setItem('appVersion', CURRENT_VERSION);
+            sessionStorage.removeItem('hasReloadedForVersion');
+        }
+        
+        // Detectar si viene del botón "atrás" y forzar recarga
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                console.log('🔄 Navegación desde caché detectada, recargando...');
+                window.location.reload(true);
+            }
+        });
+        
+        // Prevenir caché en navegación
+        window.onpageshow = function(event) {
+            if (event.persisted) {
+                window.location.reload(true);
+            }
+        };
+    </script>
+    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     
     <!-- Configuración de Firebase -->
-    <script src="firebase-config.js"></script>
+    <script src="firebase-config.js?v=20251218004"></script>
     
-    <script src="cart.js"></script>
+    <script src="cart.js?v=20251218004"></script>
 </body>
 
 </html>
