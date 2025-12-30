@@ -2,6 +2,8 @@
 
 **Tienda online de medias y pins con estilo único**
 
+--link de la pagina en funcionamiento (https://pinsandstocking.rf.gd/)
+
 ## 🌟 Características
 
 - ✅ **Catálogo de Productos** con filtros avanzados por categoría, estilo y color
