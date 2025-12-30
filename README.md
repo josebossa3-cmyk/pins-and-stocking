@@ -14,7 +14,6 @@
 - ✅ **Compresión Automática de Imágenes** (hasta 80% más livianas)
 - ✅ **Gestión de Stock** (marcar productos como agotados)
 - ✅ **Diseño Responsive** adaptado a móviles, tablets y desktop
-- ✅ **Tema Oscuro** con degradados negro/rojo/violeta
 
 ## 🗂️ Estructura del Proyecto
 
@@ -43,8 +42,3 @@ pins-and-stocking2/
 - [ ] Categorías dinámicas
 - [ ] Dashboard con analytics
 - [ ] Notificaciones push
-- [ ] Modo oscuro/claro toggle
-
----
-
-Hecho con ❤️ por [Jose Bossa](https://github.com/josebossa3-cmyk)
