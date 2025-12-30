@@ -2,8 +2,6 @@
 
 **Tienda online de medias y pins con estilo único**
 
-[![GitHub Pages](https://img.shields.io/badge/demo-live-success)](https://josebossa3-cmyk.github.io/pins-and-stocking2/)
-
 ## 🌟 Características
 
 - ✅ **Catálogo de Productos** con filtros avanzados por categoría, estilo y color
@@ -22,7 +20,6 @@ pins-and-stocking2/
 ├── index.html              # Página principal (tienda)
 ├── admin.html              # Panel administrativo
 ├── login.html              # Página de login
-├── limpiar-storage.html    # Utilidad para limpiar datos
 ├── styles.css              # Estilos principales
 ├── admin.css               # Estilos del admin
 ├── login.css               # Estilos del login
@@ -32,12 +29,10 @@ pins-and-stocking2/
 ├── imagenes/               # Carpeta de imágenes
 │   └── logo.jpg
 ├── CONFIGURACION.md        # Guía de configuración detallada
-├── RECOMENDACIONES.md      # Mejoras futuras sugeridas
 └── README.md               # Este archivo
 
 
 - [ ] Backend con Firebase/Supabase
-- [ ] Sistema de cupones/descuentos
 - [ ] Múltiples imágenes por producto
 - [ ] Categorías dinámicas
 - [ ] Dashboard con analytics
