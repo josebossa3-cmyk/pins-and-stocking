@@ -433,9 +433,6 @@ header .logo {
     -moz-user-select: none;
     -ms-user-select: none;
 }
-    cursor: pointer;
-    accent-color: #8B0000;
-}
 
 /* Paleta de colores */
 .color-palette {
@@ -610,6 +607,7 @@ header .logo {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
